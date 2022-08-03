@@ -59,11 +59,12 @@ def signin():
     if request.method == 'POST':
         email = request.form['email-signin']
         password = request.form['password-signin']
-        login_session['user'] = auth.sign_in_with_email_and_password(email, password)
-        return redirect(url_for('home'))
-    
-        error = "Authentication failed"
-        return render_template("signin.html")
+        try:
+            login_session['user'] = auth.sign_in_with_email_and_password(email, password)
+            return redirect(url_for('home'))
+        except:
+            error = "Authentication failed"
+            return render_template("signin.html")
 
     return render_template("signin.html")
 
@@ -88,10 +89,11 @@ def signup():
 
 @app.route('/forum', methods = ['POST', 'GET'])
 def forum():
-    comm = ""
+    comm = db.child("Comments").get().val()
     if request.method == 'POST':
         name = request.form["name"]
         content = request.form["content"]
+
         date = request.form["date"]
         uid = db.child("Users").child(login_session['user']['localId']).get().val()
         

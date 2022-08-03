@@ -5,7 +5,9 @@ import pyrebase
 app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SECRET_KEY'] = 'super-secret-key'
 
-#Code goes below here
+@app.route('/')
+def home():
+    return render_template("index.html")
 
 
 
